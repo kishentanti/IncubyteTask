@@ -1,0 +1,59 @@
+Technical Assessment: Deliverables
+1. Create table queries
+
+Database Name: All_customer.db
+
+SQL> CREATE TABLE ALL_CUSTOMER(
+  2  Customer_Name VARCHAR(255) NOT NULL,
+  3  ustomer_ID VARCHAR(18) NOT NULL,
+  4  Customer_Open_Date DATE NOT NULL,
+  5  Last_Consulted_Date DATE,
+  6  Vaccination_Type CHAR(5),
+  7  Doctor_Consulted CHAR(255),
+  8  State CHAR(5),
+  9  Country CHAR(5),
+ 10  Post_Code NUMBER(5),
+ 11  Date_of_Birth DATE,
+ 12  Active_Customer CHAR(1),
+ 13  CONSTRAINT Customer_Name_PK PRIMARY KEY(Customer_Name));
+
+Table created.
+
+
+SQL> CREATE TABLE IND_CUSTOMERS(
+  2  Customer_Name VARCHAR(255) NOT NULL,
+  3  ustomer_ID VARCHAR(18) NOT NULL,
+  4  Customer_Open_Date DATE NOT NULL,
+  5  Last_Consulted_Date DATE,
+  6  Vaccination_Type CHAR(5),
+  7  Doctor_Consulted CHAR(255),
+  8  State CHAR(5),
+  9  Country CHAR(5),
+ 10  Post_Code NUMBER(5),
+ 11  Date_of_Birth DATE,
+ 12  Active_Customer CHAR(1),
+ 13  CONSTRAINT Country_PK PRIMARY KEY(Country),
+ 14  CONSTRAINT Customer_Name_FK FOREIGN KEY(Customer_Name) REFERENCES ALL_CUSTOMER(Customer_Name)
+ 15  );
+
+Table created.
+
+SQL> INSERT INTO IND_CUSTOMERS(CUSTOMER_NAME, CUSTOMER_ID, CUSTOMER_OPEN_DATE, LAST_CONSULTED_DATE, VACCINATION_TYPE, DOCTOR_CONSULTED, STATE, COUNTRY, POST_CODE, DATE_OF_BIRTH, ACTIVE_CUSTOMER)
+  2  SELECT CUSTOMER_NAME, CUSTOMER_ID, CUSTOMER_OPEN_DATE, LAST_CONSULTED_DATE, VACCINATION_TYPE, DOCTOR_CONSULTED, STATE, COUNTRY, POST_CODE, DATE_OF_BIRTH, ACTIVE_CUSTOMER
+  3  FROM ALL_CUSTOMER
+  4  WHERE Country ='IND';
+
+
+
+
+2. And any script or program which reads the data from flies.
+Python program
+---------------
+import sqlite3
+var = sqlite3.connect('All_customer.db')
+var1 = var.cursor()
+var1.execute('select * from All_customer')
+res = var1.fetchall()
+var.commit()
+var.close()
+print(res)
